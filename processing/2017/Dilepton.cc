@@ -72,7 +72,7 @@ TTree* trout;
 
 //#define preTS2 0
 
-int preTS2;
+int preTS2 = 0;
 int getXangle(int run,int lumi, const char* filename);
 
 struct SortByPt{
@@ -497,7 +497,7 @@ void Dilepton(string year, vector<string> const& fileNames, string const& output
 { 
 
   bool verbose = false;
-  bool debug = false;
+  bool debug = true;
 
   bool isMC  = false;
   bool saveExtraTracks = false; 
@@ -1145,6 +1145,8 @@ void Dilepton(string year, vector<string> const& fileNames, string const& output
 		 dispersionR = Dispersion[1][140] - 4.6*((angle-140.)/10.) ;
 	      }
 
+              if(debug) cout << "   Crossing angle = " << angle << "   Dispersion (L) = " << dispersionL << "   Dispersion (R) = " << dispersionR << endl; 
+
 	      if(angle > 0){
 		 /*if(NpixelLL==1){
 		   for(int k=0;k<NpixelLL;k++){
@@ -1350,11 +1352,12 @@ void Dilepton(string year, vector<string> const& fileNames, string const& output
 	      proton1.SetPxPyPzE(0., 0.,  std::abs( proton1_pz ), proton1_energy);
 	      proton2.SetPxPyPzE(0., 0., -std::abs( proton2_pz ), proton2_energy);
 	      //missingmass = sqrt((ECM-(Muons_Etot+fabs(proton1_pz)+fabs(proton2_pz)))*(ECM-(Muons_Etot+fabs(proton1_pz)+fabs(proton2_pz)))-(Muons_pxtot)*(Muons_pxtot)-(Muons_pytot)*(Muons_pytot)- (Muons_pztot+proton1_pz+proton2_pz)*(Muons_pztot+proton1_pz+proton2_pz));
+	      TLorentzVector CM; CM.SetPxPyPzE(0., 0., 0., ECM); 
 	      TLorentzVector TotalMom; TotalMom.SetPxPyPzE(0., 0., 0., 0.);
 	      TotalMom += muonpair;
 	      TotalMom += proton1;
 	      TotalMom += proton2;
-	      missingmass = ( -TotalMom ).M(); 
+	      missingmass = ( CM - TotalMom ).M(); 
 
 	      if(year=="2017"){
 
@@ -1464,9 +1467,11 @@ int main(int argc, char** argv)
     if(era_str=="C")allnamesWithPrefixFinal.push_back("/eos/cms/store/user/jjhollar/output_mumu_merge_data_2016C_23Sep2016v1_FullFinal_pT40.root");
     if(era_str=="G")allnamesWithPrefixFinal.push_back("/eos/cms/store/user/jjhollar/output_mumu_merge_data_2016G_23Sep2016v1_FullFinal_pT40.root");
   } else if(year_str=="2017"){
+    preTS2 = 0;
     std::cout << "Analyzing 2017 data..." << std::endl;
     if(era_str=="B"||era_str=="C"||era_str=="D") preTS2 = 1;
     if(era_str=="E"||era_str=="F") preTS2 = 0;
+    if(era_str=="TEST") preTS2 = 1;
     /*if(era_str=="B")allnamesWithPrefixFinal.push_back("/eos/cms/store/user/kshcheli/NewTriggers/DoubleMuon/DoubleMuRunB2017gt.root");
     if(era_str=="C")allnamesWithPrefixFinal.push_back("/eos/cms/store/user/kshcheli/2017DileptonsAndWW/DoubleMuon/DoubleMu2017_C.root");
     if(era_str=="D")allnamesWithPrefixFinal.push_back("/eos/cms/store/user/kshcheli/2017DileptonsAndWW/DoubleMuon/DoubleMu2017_D.root");
@@ -1477,6 +1482,7 @@ int main(int argc, char** argv)
     if(era_str=="D")allnamesWithPrefixFinal.push_back("/eos/cms/store/group/phys_pps/MissingMassSearch/NTuples/MuonD.root");
     if(era_str=="E")allnamesWithPrefixFinal.push_back("/eos/cms/store/group/phys_pps/MissingMassSearch/NTuples/MuonE.root");
     if(era_str=="F")allnamesWithPrefixFinal.push_back("/eos/cms/store/group/phys_pps/MissingMassSearch/NTuples/MuonF.root");
+    if(era_str=="TEST")allnamesWithPrefixFinal.push_back("/eos/cms/store/group/phys_pps/dilepton/DoubleMuon/test/DoubleMuon/DoubleMuon_Run2017C-17Nov2017-test-v3/181108_202711/0000/output_merged.root");
   }else{
     std::cout << "Please, put the right year." << std::endl;
     return 0;

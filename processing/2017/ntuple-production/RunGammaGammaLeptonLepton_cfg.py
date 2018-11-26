@@ -2,7 +2,8 @@ import FWCore.ParameterSet.Config as cms
 
 process = cms.Process("ggll")
 
-runOnMC = False
+#runOnMC = False
+runOnMC = True
 useAOD = True # AOD or MiniAOD?
 
 leptonsType = 'Muon'
@@ -38,8 +39,10 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        '/store/data/Run2017C/DoubleMuon/AOD/17Nov2017-v1/30001/EAA10504-C1D8-E711-9062-001E67396897.root'
-	#'/store/mc/RunIIFall17DRPremix/GGToMuMu_Pt-50_Elastic_13TeV-lpair/AODSIM/94X_mc2017_realistic_v11-v1/40000/527A7A11-2A1B-E811-B9DD-A45D36FC89C4.root'
+        # Data
+        #'/store/data/Run2017C/DoubleMuon/AOD/17Nov2017-v1/30001/EAA10504-C1D8-E711-9062-001E67396897.root'
+        # MC
+	'/store/mc/RunIIFall17DRPremix/GGToMuMu_Pt-50_Elastic_13TeV-lpair/AODSIM/94X_mc2017_realistic_v11-v1/40000/527A7A11-2A1B-E811-B9DD-A45D36FC89C4.root'
         #'/store/mc/RunIIFall17DRPremix/GGToEE_Pt-50_Elastic_13TeV-lpair/AODSIM/94X_mc2017_realistic_v11-v1/00000/CE748075-4E1B-E811-BBE4-3C4A92F8FC10.root'
         #'file:/tmp/antoniov/GGToMuMu_E0CAC014-2A1B-E811-BD0C-1458D04923EC.root'
     ),
